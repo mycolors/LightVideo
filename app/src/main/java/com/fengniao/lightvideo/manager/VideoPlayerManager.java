@@ -28,7 +28,7 @@ public class VideoPlayerManager {
 
     private IMediaController mMediaController;
 
-    private MediaControl mMediaControl;
+    private IjkVideoView.MediaControl mMediaControl;
 
     private GestureDetector mGestureDetector;
 
@@ -48,7 +48,7 @@ public class VideoPlayerManager {
         mVideoView.setMediaController(mMediaController);
     }
 
-    public void setMeidaControl(MediaControl meidaControl) {
+    public void setMeidaControl(IjkVideoView.MediaControl meidaControl) {
         if (mMediaController != null) return;
         this.mMediaControl = meidaControl;
     }
@@ -58,7 +58,7 @@ public class VideoPlayerManager {
     }
 
     //本地视频
-        public void setVideoPath(String path) {
+    public void setVideoPath(String path) {
         if (TextUtils.isEmpty(path)) {
             Toast.makeText(mAcitvity, "路径为空", Toast.LENGTH_SHORT).show();
             return;
@@ -157,13 +157,16 @@ public class VideoPlayerManager {
         mBackPressed = true;
     }
 
-
+    //横竖屏转换
     public void fullChangeScreen() {
-        if (mAcitvity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {// 切换为竖屏
+        if (mAcitvity.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
             mAcitvity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        } else {
-            mAcitvity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+//        if (mAcitvity.getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+//            mAcitvity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+//        } else {
+//            mAcitvity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
     }
 
     public void onTouchActionUp() {
@@ -322,19 +325,6 @@ public class VideoPlayerManager {
             mDialog.show();
     }
 
-    public interface MediaControl {
-        void showMediaControl();
-
-        void hideMediaControl();
-
-        boolean isShowing();
-
-        void showCurrentPosition(int currentPosition);
-
-        void showTotalLengh(int totalLengh);
-
-        void setProgress(int progress);
-    }
 
     public interface PlayerControl {
         void play();

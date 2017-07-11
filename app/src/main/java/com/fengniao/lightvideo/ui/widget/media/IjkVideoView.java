@@ -1273,4 +1273,21 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         if (isPlaying())
             pause();
     }
+
+
+    public interface MediaControl {
+        void showMediaControl();
+
+        void hideMediaControl();
+
+        boolean isShowing();
+
+        void showCurrentPosition(int currentPosition);
+
+        void showTotalLengh(int totalLengh);
+
+        void setProgress(int progress);
+    }
+
+
 }
