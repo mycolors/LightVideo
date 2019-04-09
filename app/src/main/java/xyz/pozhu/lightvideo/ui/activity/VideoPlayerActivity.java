@@ -40,7 +40,7 @@ public class VideoPlayerActivity extends BaseActivity<IVideoPlayerAtView, VideoP
     TableLayout mHudView;
 
     @BindView(R.id.toolbar)
-    android.support.v7.widget.Toolbar toolbar;
+    androidx.appcompat.widget.Toolbar toolbar;
 
     @BindView(R.id.title)
     TextView title;
