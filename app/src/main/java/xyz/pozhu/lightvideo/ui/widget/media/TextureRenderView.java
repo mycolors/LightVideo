@@ -212,7 +212,7 @@ public class TextureRenderView extends TextureView implements IRenderView {
 
     private SurfaceCallback mSurfaceCallback;
 
-    private static final class SurfaceCallback implements TextureView.SurfaceTextureListener, ISurfaceTextureHost {
+    private static final class SurfaceCallback implements SurfaceTextureListener, ISurfaceTextureHost {
         private SurfaceTexture mSurfaceTexture;
         private boolean mIsFormatChanged;
         private int mWidth;

@@ -7,7 +7,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.TableLayout;
 
-
 import java.util.Locale;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -62,7 +61,7 @@ public class InfoHudViewHolder {
         }
     }
 
-    private static String formatedSpeed(long bytes, long elapsed_milli) {
+    private static String formatedSpeed(long bytes,long elapsed_milli) {
         if (elapsed_milli <= 0) {
             return "0 B/s";
         }

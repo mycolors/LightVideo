@@ -39,16 +39,14 @@ import android.widget.MediaController;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import xyz.pozhu.lightvideo.R;
-import xyz.pozhu.lightvideo.app.Settings;
-import xyz.pozhu.lightvideo.services.MediaPlayerService;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
@@ -60,6 +58,9 @@ import tv.danmaku.ijk.media.player.misc.IMediaDataSource;
 import tv.danmaku.ijk.media.player.misc.IMediaFormat;
 import tv.danmaku.ijk.media.player.misc.ITrackInfo;
 import tv.danmaku.ijk.media.player.misc.IjkMediaFormat;
+import xyz.pozhu.lightvideo.R;
+import xyz.pozhu.lightvideo.app.Settings;
+import xyz.pozhu.lightvideo.services.MediaPlayerService;
 
 public class IjkVideoView extends FrameLayout implements MediaController.MediaPlayerControl {
     private String TAG = "IjkVideoView";
@@ -175,9 +176,9 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         subtitleDisplay = new TextView(context);
         subtitleDisplay.setTextSize(24);
         subtitleDisplay.setGravity(Gravity.CENTER);
-        FrameLayout.LayoutParams layoutParams_txt = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
+        LayoutParams layoutParams_txt = new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
                 Gravity.BOTTOM);
         addView(subtitleDisplay, layoutParams_txt);
     }
@@ -204,9 +205,9 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             renderView.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
 
         View renderUIView = mRenderView.getView();
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
                 Gravity.CENTER);
         renderUIView.setLayoutParams(lp);
         addView(renderUIView);
@@ -337,7 +338,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                     (TextUtils.isEmpty(scheme) || scheme.equalsIgnoreCase("file"))) {
                 IMediaDataSource dataSource = new FileMediaDataSource(new File(mUri.toString()));
                 mMediaPlayer.setDataSource(dataSource);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            }  else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 mMediaPlayer.setDataSource(mAppContext, mUri, mHeaders);
             } else {
                 mMediaPlayer.setDataSource(mUri.toString());
@@ -732,6 +733,13 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (isInPlaybackState() && mMediaController != null) {
+            toggleMediaControlsVisiblity();
+        }
+        return false;
+    }
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
@@ -903,13 +911,11 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
             IRenderView.AR_ASPECT_FIT_PARENT,
             IRenderView.AR_ASPECT_FILL_PARENT,
             IRenderView.AR_ASPECT_WRAP_CONTENT,
-            IRenderView.AR_MATCH_PARENT,
+            // IRenderView.AR_MATCH_PARENT,
             IRenderView.AR_16_9_FIT_PARENT,
-            IRenderView.AR_4_3_FIT_PARENT
-    };
-    private int mCurrentAspectRatioIndex = 3;//0
-    private int mCurrentAspectRatio = s_allAspectRatio[3];//0
-
+            IRenderView.AR_4_3_FIT_PARENT};
+    private int mCurrentAspectRatioIndex = 0;
+    private int mCurrentAspectRatio = s_allAspectRatio[0];
 
     public int toggleAspectRatio() {
         mCurrentAspectRatioIndex++;
@@ -930,7 +936,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     private List<Integer> mAllRenders = new ArrayList<Integer>();
     private int mCurrentRenderIndex = 0;
-    private int mCurrentRender = RENDER_TEXTURE_VIEW;
+    private int mCurrentRender = RENDER_NONE;
 
     private void initRenders() {
         mAllRenders.clear();

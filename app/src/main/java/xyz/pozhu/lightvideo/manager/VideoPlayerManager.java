@@ -37,7 +37,7 @@ public class VideoPlayerManager {
         this.mAcitvity = activity;
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
-        mVideoView = (IjkVideoView) mAcitvity.findViewById(R.id.video_view);
+        mVideoView = mAcitvity.findViewById(R.id.video_view);
         mDialog = new VideoDialog(mAcitvity);
         mGestureDetector = new GestureDetector(activity, new MyDetectorListener());
     }
